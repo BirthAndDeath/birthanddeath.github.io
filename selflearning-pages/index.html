@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-lang="zh">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>selflearning-pages · 多语言自学文档站点</title>
+<meta name="description" content="selflearning-pages：面向自主学习的多语言文档站点，使用 Astro + Starlight 构建，支持英文与简体中文。完整文档见 GitHub README。" />
+<link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="../index.html"><span class="dot"></span>Birth_And_Death</a>
+    <div class="header-actions">
+      <nav class="nav">
+        <a href="../index.html#projects" data-i18n="nav.projects">项目</a>
+        <a href="https://github.com/BirthAndDeath/selflearning-pages" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+      <select id="langSelect" class="lang-select" aria-label="Language">
+        <option value="zh">中文</option>
+        <option value="en">English</option>
+      </select>
+    </div>
+  </div>
+</header>
+
+<main class="detail">
+  <div class="wrap">
+    <a class="back" href="../index.html" data-i18n="back">← 返回项目列表</a>
+
+    <h1>selflearning-pages</h1>
+    <p class="lead" data-i18n="sl.lead">一个面向自主学习的多语言文档站点，使用 Astro + Starlight 构建，使用 MDX 编写内容，支持英文与简体中文。</p>
+
+    <div class="detail-meta">
+      <span class="status active" data-i18n="status.liveDev">在线 · 开发中</span>
+      <span class="tag">Astro</span>
+      <span class="tag">Starlight</span>
+      <span class="tag">MDX</span>
+      <span class="tag">TypeScript</span>
+      <span class="tag">CC0-1.0</span>
+    </div>
+    <div class="detail-meta links">
+      <a class="btn primary" href="https://selflearning-pages.pages.dev/" target="_blank" rel="noopener" data-i18n="home.visit">访问站点 ↗</a>
+    </div>
+
+    <section class="panel">
+      <h2 data-i18n="panel.highlights">亮点</h2>
+      <ul>
+        <li data-i18n="sl.h1">基于 Astro + Starlight 的内容驱动文档站。</li>
+        <li data-i18n="sl.h2">多语言 — 英文（en）与简体中文（zh-cn）。</li>
+        <li data-i18n="sl.h3">使用 MDX 编写内容，支持 Starlight 组件与标准 Markdown。</li>
+        <li data-i18n="sl.h4">公有领域（CC0-1.0），欢迎贡献。</li>
+      </ul>
+    </section>
+
+    <section class="panel">
+      <h2 data-i18n="panel.docs">完整文档</h2>
+      <p data-i18n="sl.docs">以下内容实时取自仓库的 GitHub README。</p>
+      <div class="readme" data-owner="BirthAndDeath" data-repo="selflearning-pages" data-branch="main"
+        data-loading-zh="正在加载 README…" data-loading-en="Loading README…"
+        data-error-zh="无法加载 README，请访问 GitHub 仓库查看。"
+        data-error-en="Failed to load the README. Please open the repository on GitHub."></div>
+      <div class="detail-meta links">
+        <a class="btn" href="https://github.com/BirthAndDeath/selflearning-pages" target="_blank" rel="noopener" data-i18n="btn.repo">GitHub 仓库 ↗</a>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span id="year">2026</span> Birth_And_Death</span>
+    <a href="../index.html" data-i18n="footer.all">← 所有项目</a>
+  </div>
+</footer>
+
+<script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+<script src="../assets/i18n.js"></script>
+<script src="../assets/readme.js"></script>
+</body>
+</html>

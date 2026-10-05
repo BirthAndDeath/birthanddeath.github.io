@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-lang="zh">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>OpenWire · 后量子加密的 P2P 聊天</title>
+<meta name="description" content="OpenWire：跨平台 P2P 聊天应用，采用后量子端到端加密（ML-DSA-65 + ML-KEM-768 + AES-GCM），基于 libp2p 与 Tauri 2。完整文档见 GitHub README。" />
+<link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="../index.html"><span class="dot"></span>Birth_And_Death</a>
+    <div class="header-actions">
+      <nav class="nav">
+        <a href="../index.html#projects" data-i18n="nav.projects">项目</a>
+        <a href="https://github.com/BirthAndDeath/OpenWire" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+      <select id="langSelect" class="lang-select" aria-label="Language">
+        <option value="zh">中文</option>
+        <option value="en">English</option>
+      </select>
+    </div>
+  </div>
+</header>
+
+<main class="detail">
+  <div class="wrap">
+    <a class="back" href="../index.html" data-i18n="back">← 返回项目列表</a>
+
+    <h1>OpenWire</h1>
+    <p class="lead" data-i18n="ow.lead">一个跨平台 P2P 聊天应用，采用后量子端到端加密。基于 libp2p 构建 P2P 网络，桌面端使用 Tauri 2 + SvelteKit，并提供 ratatui 终端界面。</p>
+
+    <div class="detail-meta">
+      <span class="status wip" data-i18n="status.dev">开发中</span>
+      <span class="tag">Rust</span>
+      <span class="tag">libp2p</span>
+      <span class="tag">Tauri 2</span>
+      <span class="tag">SvelteKit</span>
+      <span class="tag">AGPL-3.0</span>
+    </div>
+    <div class="detail-meta links">
+      <a class="btn primary" href="https://github.com/BirthAndDeath/OpenWire" target="_blank" rel="noopener" data-i18n="btn.repo">GitHub 仓库 ↗</a>
+    </div>
+
+    <div class="note" data-i18n="ow.note">仅供演示，生产自负，未经审计。</div>
+
+    <section class="panel">
+      <h2 data-i18n="panel.highlights">亮点</h2>
+      <ul>
+        <li data-i18n="ow.h1">后量子 E2EE — ML-DSA-65 + ML-KEM-768 + AES-GCM。</li>
+        <li data-i18n="ow.h2">P2P 网络与 NAT 穿透 — libp2p（QUIC / TCP / WebSocket / mDNS / Kademlia DHT），以及 Circuit Relay v2、DCUtR、AutoNAT。</li>
+        <li data-i18n="ow.h3">文件传输 — 分片流式、断点续传、完整性校验；离线队列在联系人上线后自动重试。</li>
+        <li data-i18n="ow.h4">多端形态 — ratatui TUI / JSON CLI，以及 Tauri 2 + SvelteKit 桌面端，跨 Windows / macOS / Linux。</li>
+      </ul>
+    </section>
+
+    <section class="panel">
+      <h2 data-i18n="panel.docs">完整文档</h2>
+      <p data-i18n="ow.docs">以下内容实时取自仓库的 GitHub README。</p>
+      <div class="readme" data-owner="BirthAndDeath" data-repo="OpenWire" data-branch="master"
+        data-loading-zh="正在加载 README…" data-loading-en="Loading README…"
+        data-error-zh="无法加载 README，请访问 GitHub 仓库查看。"
+        data-error-en="Failed to load the README. Please open the repository on GitHub."></div>
+      <div class="detail-meta links">
+        <a class="btn" href="https://space.bilibili.com/3494362084280927/" target="_blank" rel="noopener">Bilibili ↗</a>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span id="year">2026</span> Birth_And_Death</span>
+    <a href="../index.html" data-i18n="footer.all">← 所有项目</a>
+  </div>
+</footer>
+
+<script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+<script src="../assets/i18n.js"></script>
+<script src="../assets/readme.js"></script>
+</body>
+</html>
