@@ -1,4 +1,4 @@
-/* 无服务器、纯前端的简单 i18n。
+﻿/* 无服务器、纯前端的简单 i18n。
  * Simple client-side i18n: no server, no fetch, works from file://.
  * 用法 / Usage: 给元素加 data-i18n="key"，脚本会替换其文本。 */
 (function () {
@@ -11,7 +11,7 @@
     zh: {
       "nav.projects": "项目",
       "footer.all": "← 所有项目",
-      "footer.built": "纯静态 HTML & CSS · 由 GitHub Pages 托管",
+      "footer.built": "静态站点 · 由 GitHub Pages 托管",
       "back": "← 返回项目列表",
 
       "home.hello": "你好，我是",
@@ -44,7 +44,7 @@
       "wb.h2": "基于能力的文件系统访问 — 只授予应用所需的精确访问权限。",
       "wb.h3": "完全回滚 — 沙箱内任何更改都可丢弃，应用像临时环境一样运行。",
       "wb.h4": "基于 Wasmtime + WASI，独立 worker 进程隔离执行，跨平台设计。",
-      "wb.docs": "以下内容实时取自仓库的 GitHub README。",
+      "wb.docs": "以下内容来自仓库的 GitHub README。",
 
       "ow.lead": "一个跨平台 P2P 聊天应用，采用后量子端到端加密。基于 libp2p 构建 P2P 网络，桌面端使用 Tauri 2 + SvelteKit，并提供 ratatui 终端界面。",
       "ow.note": "仅供演示，生产自负，未经审计。",
@@ -52,22 +52,22 @@
       "ow.h2": "P2P 网络与 NAT 穿透 — libp2p（QUIC / TCP / WebSocket / mDNS / Kademlia DHT），以及 Circuit Relay v2、DCUtR、AutoNAT。",
       "ow.h3": "文件传输 — 分片流式、断点续传、完整性校验；离线队列在联系人上线后自动重试。",
       "ow.h4": "多端形态 — ratatui TUI / JSON CLI，以及 Tauri 2 + SvelteKit 桌面端，跨 Windows / macOS / Linux。",
-      "ow.docs": "以下内容实时取自仓库的 GitHub README。",
+      "ow.docs": "以下内容来自仓库的 GitHub README。",
 
       "sl.lead": "一个面向自主学习的多语言文档站点，使用 Astro + Starlight 构建，使用 MDX 编写内容，支持英文与简体中文。",
       "sl.h1": "基于 Astro + Starlight 的内容驱动文档站。",
       "sl.h2": "多语言 — 英文（en）与简体中文（zh-cn）。",
       "sl.h3": "使用 MDX 编写内容，支持 Starlight 组件与标准 Markdown。",
       "sl.h4": "公有领域（CC0-1.0），欢迎贡献。",
-      "sl.docs": "以下内容实时取自仓库的 GitHub README。",
+      "sl.docs": "以下内容来自仓库的 GitHub README。",
 
       "ws.lead": "这是你正在浏览的个人网站。它集中介绍并索引我的所有开源项目，每个项目都有独立的介绍页面。",
       "ws.h1": "首页 — 项目卡片总览与个人简介。",
-      "ws.h2": "项目页 — 每个项目一个页面，仅保留简介与要点，并链接到该仓库的 GitHub README。",
+      "ws.h2": "项目页 — 每个项目一个页面，在构建时抓取并内联渲染该仓库的 README。",
       "ws.h3": "中英双语 — 可在页面右上角一键切换。",
-      "ws.t1": "纯静态站点，无构建步骤、无外部依赖，由 GitHub Pages 直接托管。",
-      "ws.t2": "共享样式表位于 assets/style.css，支持深色 / 浅色配色。",
-      "ws.t3": "新增项目：在首页添加一张卡片，并以项目名新建文件夹、放入 index.html。",
+      "ws.t1": "静态站点：构建时抓取 README 并渲染为 HTML，再由 GitHub Actions 部署到 GitHub Pages。",
+      "ws.t2": "共享样式表位于 public/assets/style.css，支持深色 / 浅色配色。",
+      "ws.t3": "新增项目：在 src/lib/projects.mjs 中登记，并在 src/pages/<项目名>/ 新建页面。",
       "ws.contents": "站点内容",
       "ws.indexed": "收录的项目",
       "ws.notes": "技术说明",
@@ -82,7 +82,7 @@
     en: {
       "nav.projects": "Projects",
       "footer.all": "← All projects",
-      "footer.built": "Plain HTML & CSS · Hosted on GitHub Pages",
+      "footer.built": "Static site · Hosted on GitHub Pages",
       "back": "← Back to projects",
 
       "home.hello": "Hi, I'm",
@@ -115,7 +115,7 @@
       "wb.h2": "Capability-based filesystem access — grant only the exact access an app needs.",
       "wb.h3": "Full rollback — discard any change made inside the sandbox, so apps behave like temporary environments.",
       "wb.h4": "Built on Wasmtime + WASI with isolated worker processes and a cross-platform design.",
-      "wb.docs": "The content below is loaded live from the repository's GitHub README.",
+      "wb.docs": "The content below is from the repository's GitHub README.",
 
       "ow.lead": "A cross-platform P2P chat app with post-quantum end-to-end encryption. It builds its P2P network on libp2p, uses Tauri 2 + SvelteKit on desktop, and ships a ratatui terminal UI.",
       "ow.note": "Demo only — use at your own risk. Not audited.",
@@ -123,22 +123,22 @@
       "ow.h2": "P2P networking and NAT traversal — libp2p (QUIC / TCP / WebSocket / mDNS / Kademlia DHT) plus Circuit Relay v2, DCUtR and AutoNAT.",
       "ow.h3": "File transfer — chunked streaming, resume and integrity checks; an offline queue retries when a contact comes online.",
       "ow.h4": "Multiple front ends — ratatui TUI / JSON CLI and a Tauri 2 + SvelteKit desktop app, across Windows / macOS / Linux.",
-      "ow.docs": "The content below is loaded live from the repository's GitHub README.",
+      "ow.docs": "The content below is from the repository's GitHub README.",
 
       "sl.lead": "A multilingual documentation site for self-directed learning, built with Astro + Starlight and authored in MDX, with English and Simplified Chinese.",
       "sl.h1": "A content-driven docs site built with Astro + Starlight.",
       "sl.h2": "Multilingual — English (en) and Simplified Chinese (zh-cn).",
       "sl.h3": "Content authored in MDX, with Starlight components and standard Markdown.",
       "sl.h4": "Public domain (CC0-1.0); contributions welcome.",
-      "sl.docs": "The content below is loaded live from the repository's GitHub README.",
+      "sl.docs": "The content below is from the repository's GitHub README.",
 
       "ws.lead": "This is the personal website you are viewing. It introduces and indexes all of my open-source projects, each with its own page.",
       "ws.h1": "Home — an overview of project cards and a short intro.",
-      "ws.h2": "Project pages — a concise intro and highlights, linking to each repository's GitHub README.",
+      "ws.h2": "Project pages — one page per project that fetches and inlines the repository README at build time.",
       "ws.h3": "Bilingual — switch between Chinese and English from the top-right corner.",
-      "ws.t1": "Fully static — no build step, no external dependencies, hosted directly on GitHub Pages.",
-      "ws.t2": "Shared stylesheet at assets/style.css with dark / light color schemes.",
-      "ws.t3": "To add a project: add a card on the homepage and create a folder named after it containing an index.html.",
+      "ws.t1": "Static site — READMEs are fetched and rendered to HTML at build time, then deployed to GitHub Pages via GitHub Actions.",
+      "ws.t2": "Shared stylesheet at public/assets/style.css with dark / light color schemes.",
+      "ws.t3": "To add a project: register it in src/lib/projects.mjs and add a page under src/pages/<slug>/.",
       "ws.contents": "Contents",
       "ws.indexed": "Indexed projects",
       "ws.notes": "Technical notes",
@@ -183,9 +183,10 @@
   function detectLang() {
     var stored = normalize(getStored());
     if (stored) return stored;
-    var prefs = navigator.languages && navigator.languages.length
-      ? navigator.languages
-      : [navigator.language || navigator.userLanguage];
+    var prefs =
+      navigator.languages && navigator.languages.length
+        ? navigator.languages
+        : [navigator.language || navigator.userLanguage];
     for (var i = 0; i < prefs.length; i++) {
       var match = normalize(prefs[i]);
       if (match) return match;
@@ -217,7 +218,6 @@
   function init() {
     var select = document.getElementById("langSelect");
     if (select) {
-      /* 若页面未预置 <option>，按语言列表自动填充。 */
       if (!select.options.length) {
         for (var i = 0; i < SUPPORTED.length; i++) {
           var option = document.createElement("option");

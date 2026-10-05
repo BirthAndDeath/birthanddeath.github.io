@@ -1,0 +1,103 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { projects, personJsonLd } from "../lib/projects.mjs";
+
+const title = "Birth_And_Death · 开源项目主页";
+const description =
+  "Birth_And_Death 的开源项目主页：WhiteBox-Forge（WebAssembly 沙箱）、OpenWire（后量子 P2P 聊天）、selflearning-pages（自学文档站点）。";
+---
+<BaseLayout title={title} description={description} jsonLd={[personJsonLd()]}>
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow">studying… &nbsp;·&nbsp; Rust · System Security · P2P</span>
+      <h1>
+        <span data-i18n="home.hello">你好，我是</span>
+        <span class="grad">Birth_And_Death</span>
+      </h1>
+      <p data-i18n="home.sub">
+        这里收录我开发的开源项目：从 WebAssembly 安全沙箱、后量子加密的 P2P 聊天，到自学文档站点。
+      </p>
+      <div class="hero-actions">
+        <a class="btn primary" href="#projects" data-i18n="home.browse">浏览项目</a>
+        <a
+          class="btn"
+          href="https://github.com/BirthAndDeath"
+          target="_blank"
+          rel="noopener"
+          data-i18n="home.github">GitHub 主页 ↗</a
+        >
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="projects">
+    <div class="wrap">
+      <div class="section-title">
+        <h2 data-i18n="home.projects">项目</h2>
+        <span data-i18n="home.count">共 4 个</span>
+      </div>
+
+      <div class="grid">
+        {
+          projects.map((project) => (
+            <article class="card">
+              <div class="top">
+                <h3>
+                  <a href={`/${project.slug}/`}>{project.name}</a>
+                </h3>
+                <span class={`status ${project.status.cls}`} data-i18n={project.status.key}>
+                  {project.status.zh}
+                </span>
+              </div>
+              <p class="desc" data-i18n={project.card.key}>
+                {project.card.zh}
+              </p>
+              <div class="tags">
+                {project.tags.map((tag) => (
+                  <span class="tag">{tag}</span>
+                ))}
+              </div>
+              <div class="links">
+                <a href={`/${project.slug}/`} data-i18n="home.details">
+                  详情 →
+                </a>
+                <a
+                  href={project.cardLink.href}
+                  target="_blank"
+                  rel="noopener"
+                  data-i18n={project.cardLink.key}
+                >
+                  {project.cardLink.zh}
+                </a>
+              </div>
+            </article>
+          ))
+        }
+
+        <article class="card">
+          <div class="top">
+            <h3><a href="/website/">birthanddeath.github.io</a></h3>
+            <span class="status active" data-i18n="status.site">本站</span>
+          </div>
+          <p class="desc" data-i18n="card.website.desc">
+            你正在浏览的个人网站，集中介绍与索引上述所有项目。
+          </p>
+          <div class="tags">
+            <span class="tag">Astro</span>
+            <span class="tag">HTML</span>
+            <span class="tag">GitHub Pages</span>
+          </div>
+          <div class="links">
+            <a href="/website/" data-i18n="home.details">详情 →</a>
+            <a
+              href="https://github.com/BirthAndDeath/birthanddeath.github.io"
+              target="_blank"
+              rel="noopener"
+              data-i18n="home.gh">GitHub ↗</a
+            >
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

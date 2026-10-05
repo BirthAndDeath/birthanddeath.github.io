@@ -1,0 +1,93 @@
+---
+const { project, readmeHtml } = Astro.props;
+---
+<div class="wrap">
+  <a class="back" href="/" data-i18n="back">← 返回项目列表</a>
+
+  <h1>{project.name}</h1>
+  <p class="lead" data-i18n={project.lead.key}>{project.lead.zh}</p>
+
+  <div class="detail-meta">
+    <span class={`status ${project.status.cls}`} data-i18n={project.status.key}>
+      {project.status.zh}
+    </span>
+    {project.tags.map((tag) => <span class="tag">{tag}</span>)}
+  </div>
+
+  <div class="detail-meta links">
+    {
+      project.links.map((link) => (
+        <a
+          class={`btn${link.cls ? " " + link.cls : ""}`}
+          href={link.href}
+          target="_blank"
+          rel="noopener"
+          data-i18n={link.key}
+        >
+          {link.zh}
+        </a>
+      ))
+    }
+  </div>
+
+  {
+    project.note && (
+      <div class="note" data-i18n={project.note.key}>
+        {project.note.zh}
+      </div>
+    )
+  }
+
+  <section class="panel">
+    <h2 data-i18n="panel.highlights">亮点</h2>
+    <ul>
+      {
+        project.highlights.map((item) => (
+          <li data-i18n={item.key}>{item.zh}</li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="panel">
+    <h2 data-i18n="panel.docs">完整文档</h2>
+    <p data-i18n={project.docs.key}>{project.docs.zh}</p>
+    {
+      readmeHtml ? (
+        <div class="readme" set:html={readmeHtml} />
+      ) : (
+        <p class="readme-status">
+          无法加载 README，
+          <a href={`${project.repoUrl}#readme`} target="_blank" rel="noopener">
+            在 GitHub 上查看 README ↗
+          </a>
+        </p>
+      )
+    }
+    {
+      project.extraLinks && project.extraLinks.length > 0 && (
+        <div class="detail-meta links">
+          {project.extraLinks.map((link) =>
+            link.key ? (
+              <a
+                class="btn"
+                href={link.href}
+                target="_blank"
+                rel="noopener"
+                data-i18n={link.key}
+              >
+                {link.zh}
+              </a>
+            ) : (
+              <a class="btn" href={link.href} target="_blank" rel="noopener">
+                {link.label}
+              </a>
+            )
+          )}
+        </div>
+      )
+    }
+  </section>
+
+  <a class="back" href="/" data-i18n="footer.all">← 所有项目</a>
+</div>

@@ -1,0 +1,96 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { SITE, personJsonLd } from "../../lib/projects.mjs";
+
+const title = "birthanddeath.github.io · 个人项目主页（Astro）";
+const description =
+  "Birth_And_Death 的个人网站：用 Astro 构建，构建时抓取各仓库 README 并渲染为静态页面，集中介绍与索引所有开源项目。";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Birth_And_Death 项目主页",
+  url: SITE,
+  inLanguage: "zh-CN",
+  author: personJsonLd(),
+};
+---
+<BaseLayout title={title} description={description} mainClass="detail" jsonLd={jsonLd}>
+  <div class="wrap">
+    <a class="back" href="/" data-i18n="back">← 返回项目列表</a>
+
+    <h1>birthanddeath.github.io</h1>
+    <p class="lead" data-i18n="ws.lead">
+      这是你正在浏览的个人网站。它集中介绍并索引我的所有开源项目，每个项目都有独立的介绍页面。
+    </p>
+
+    <div class="detail-meta">
+      <span class="status active" data-i18n="status.site">本站</span>
+      <span class="tag">Astro</span>
+      <span class="tag">TypeScript</span>
+      <span class="tag">GitHub Pages</span>
+    </div>
+    <div class="detail-meta links">
+      <a
+        class="btn"
+        href="https://github.com/BirthAndDeath/birthanddeath.github.io"
+        target="_blank"
+        rel="noopener"
+        data-i18n="ws.repo">GitHub 仓库 ↗</a
+      >
+      <a class="btn" href="/" data-i18n="ws.home">访问首页 ↗</a>
+    </div>
+
+    <section class="panel">
+      <h2 data-i18n="ws.contents">站点内容</h2>
+      <ul>
+        <li data-i18n="ws.h1">首页 — 项目卡片总览与个人简介。</li>
+        <li data-i18n="ws.h2">
+          项目页 — 每个项目一个页面，在构建时抓取并内联渲染该仓库的 README。
+        </li>
+        <li data-i18n="ws.h3">中英双语 — 可在页面右上角一键切换。</li>
+      </ul>
+    </section>
+
+    <section class="panel">
+      <h2 data-i18n="ws.indexed">收录的项目</h2>
+      <table class="kv">
+        <thead>
+          <tr>
+            <th data-i18n="ws.col.project">项目</th>
+            <th data-i18n="ws.col.summary">简介</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="/whitebox-forge/">WhiteBox-Forge</a></td>
+            <td data-i18n="ws.row.whitebox">透明、基于能力的 WebAssembly 应用沙箱</td>
+          </tr>
+          <tr>
+            <td><a href="/openwire/">OpenWire</a></td>
+            <td data-i18n="ws.row.openwire">后量子加密的跨平台 P2P 聊天应用</td>
+          </tr>
+          <tr>
+            <td><a href="/selflearning-pages/">selflearning-pages</a></td>
+            <td data-i18n="ws.row.selflearning">多语言自学文档站点</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="panel">
+      <h2 data-i18n="ws.notes">技术说明</h2>
+      <ul>
+        <li data-i18n="ws.t1">
+          静态站点：构建时抓取 README 并渲染为 HTML，再由 GitHub Actions 部署到 GitHub Pages。
+        </li>
+        <li data-i18n="ws.t2">共享样式表位于 public/assets/style.css，支持深色 / 浅色配色。</li>
+        <li data-i18n="ws.t3">
+          新增项目：在 src/lib/projects.mjs 中登记，并在 src/pages/项目名/ 新建页面。
+        </li>
+      </ul>
+    </section>
+
+    <a class="back" href="/" data-i18n="footer.all">← 所有项目</a>
+  </div>
+</BaseLayout>

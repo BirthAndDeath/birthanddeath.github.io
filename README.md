@@ -1,64 +1,85 @@
 # birthanddeath.github.io
 
 My personal website — a hub that introduces and indexes all of my open-source projects.
-
-我的个人网站：集中介绍并索引我的所有开源项目，每个项目都有一个中英双语介绍页面。
+我的个人网站：集中介绍并索引我的所有开源项目。
 
 **Live:** https://birthanddeath.github.io
+
+Built with [Astro](https://astro.build). Each project README is fetched **at build time**, rendered to Markdown-free static HTML, and inlined into its project page — so all project content is crawlable and works without client-side fetching.
+
+使用 [Astro](https://astro.build) 构建。每个项目的 README 在**构建时**抓取并渲染为静态 HTML 内联进项目页，因此所有项目内容都可被搜索引擎收录，也不依赖浏览器端抓取。
+
+## Commands
+
+| Command | Action |
+| --- | --- |
+| `npm install` | 安装依赖 |
+| `npm run dev` | 本地开发服务器（`localhost:4321`） |
+| `npm run build` | 构建静态站点到 `dist/` |
+| `npm run preview` | 预览构建产物 |
 
 ## Structure
 
 ```
 .
-├── index.html               # Homepage / 首页（项目卡片总览）
-├── whitebox-forge/
-│   └── index.html           # WhiteBox-Forge
-├── openwire/
-│   └── index.html           # OpenWire
-├── selflearning-pages/
-│   └── index.html           # selflearning-pages
-├── website/
-│   └── index.html           # 本站介绍 / About this site
-└── assets/
-    └── style.css            # Shared stylesheet / 共享样式表（深色 / 浅色）
+├── astro.config.mjs        # site + sitemap 集成
+├── public/
+│   ├── assets/style.css     # 共享样式表（深色 / 浅色）
+│   ├── assets/i18n.js       # 纯前端 i18n（构建后仍是静态资源）
+│   └── robots.txt
+├── src/
+│   ├── components/          # Header / Footer
+│   ├── layouts/             # BaseLayout（SEO head）+ ProjectLayout
+│   ├── lib/
+│   │   ├── markdown.mjs     # 轻量 Markdown 渲染器（构建时）
+│   │   └── projects.mjs     # 项目元数据 + README 抓取
+│   └── pages/
+│       ├── index.astro          # /
+│       ├── whitebox-forge/      # /whitebox-forge/
+│       ├── openwire/            # /openwire/
+│       ├── selflearning-pages/  # /selflearning-pages/
+│       └── website/             # /website/
+└── .github/workflows/deploy.yml  # GitHub Actions 构建并部署到 Pages
 ```
 
-Each project lives in its own folder and is served at a clean URL, e.g. `/whitebox-forge/`.
-每个项目位于独立文件夹中，并通过干净的 URL 访问，例如 `/whitebox-forge/`。
+## README embedding / README 内嵌
 
-Project pages keep only a concise introduction and link to the repository's GitHub README as the single source of truth.
-项目页仅保留简洁介绍，完整内容以各仓库的 GitHub README 为准，避免重复与内容漂移。
+At build time `src/lib/projects.mjs` fetches each repository README, trying in order: **GitHub API → jsDelivr → raw.githubusercontent.com**, with retries and a timeout. The Markdown is rendered by `src/lib/markdown.mjs` (no external library; content is HTML-escaped and dangerous URL schemes are filtered), then relative links/images are rewritten to GitHub absolute URLs. If every source fails, it falls back to a committed copy under `src/data/readmes/`, and finally to a link to the README on GitHub.
 
-## i18n / 多语言
+构建时依次从 **GitHub API → jsDelivr → raw.githubusercontent.com** 获取 README（带重试与超时），由内置渲染器转为 HTML（转义内容、过滤危险协议），并把相对链接/图片改写为 GitHub 绝对地址；全部失败时回退到 `src/data/readmes/` 下的缓存副本，最后再回退为 GitHub 链接。
+
+## i18n
 
 Client-side only, no server required (works from `file://`). Language is chosen from the saved preference, then the browser language, falling back to English; the header list persists the choice in `localStorage`.
+
 纯前端实现，无需服务器（`file://` 直接可用）。语言取自已保存的选择，其次浏览器语言偏好，最后回落英文；右上角列表可手动切换并持久化到 `localStorage`。
 
-## README rendering / README 渲染
+## SEO
 
-Each project page fetches its repository README at runtime and renders it inline, trying jsDelivr, then raw.githubusercontent.com, then the GitHub API. This needs network access; if all sources fail, an error message with a link to the repository is shown. Rendering itself is done by a built-in lightweight Markdown renderer (no external library, HTML is escaped).
-每个项目页在运行时获取该仓库的 README 并内联渲染，依次尝试 jsDelivr、raw.githubusercontent.com、GitHub API。此功能需要联网；若全部失败会显示错误提示与仓库链接。渲染由内置的轻量 Markdown 渲染器完成（无外部库，HTML 会被转义）。
+- Static HTML output (no runtime rendering) — README content is indexable.
+- `sitemap-index.xml` via `@astrojs/sitemap`, plus `robots.txt`.
+- Per-page `canonical`, Open Graph, and Twitter Card meta.
+- JSON-LD structured data: `Person` (home) and `SoftwareSourceCode` (each project).
 
-Plain static HTML + CSS, no build step, hosted directly on GitHub Pages.
-纯静态 HTML + CSS，无构建步骤，由 GitHub Pages 直接托管。
+## Deploy / 部署
 
-## Projects / 项目
+Pushing to `main` triggers `.github/workflows/deploy.yml`, which builds with Astro and deploys `dist/` to GitHub Pages.
 
-| Project | Description |
-| --- | --- |
-| [WhiteBox-Forge](https://github.com/BirthAndDeath/WhiteBox-Forge) | 透明、基于能力的 WebAssembly 应用沙箱 / Transparent, capability-based WASM sandbox |
-| [OpenWire](https://github.com/BirthAndDeath/OpenWire) | 后量子加密的跨平台 P2P 聊天应用 / Post-quantum P2P chat app |
-| [selflearning-pages](https://selflearning-pages.pages.dev/) | 多语言自学文档站点 / Multilingual self-learning docs |
+**One-time setup:** in the repository, open **Settings → Pages → Build and deployment → Source** and select **GitHub Actions**.
+
+推送到 `main` 后，`.github/workflows/deploy.yml` 会用 Astro 构建并将 `dist/` 部署到 GitHub Pages。
+
+**一次性设置：** 打开仓库 **Settings → Pages → Build and deployment → Source**，选择 **GitHub Actions**。
 
 ## Adding a project / 新增项目
 
-1. Add a card to `index.html`.
-2. Create a folder named after the project and add an `index.html` inside it.
-3. Optionally list it in this README.
+1. Register the project in `src/lib/projects.mjs` (slug, repo, branch, title, description, highlights, links…).
+2. Add a page under `src/pages/<slug>/index.astro` that calls `getProject("<slug>")` and `getReadmeHtml(...)`.
+3. `npm run build` to verify.
 
-1. 在 `index.html` 中添加一张卡片。
-2. 以项目名新建文件夹，并在其中放入 `index.html`。
-3. 可选：在本 README 中列出该项目。
+1. 在 `src/lib/projects.mjs` 中登记项目（slug、repo、branch、标题、描述、要点、链接等）。
+2. 在 `src/pages/<slug>/index.astro` 新建页面，调用 `getProject("<slug>")` 与 `getReadmeHtml(...)`。
+3. 运行 `npm run build` 验证。
 
 ## License
 

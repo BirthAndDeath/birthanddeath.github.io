@@ -1,0 +1,16 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ProjectLayout from "../../layouts/ProjectLayout.astro";
+import { getProject, getReadmeHtml, projectJsonLd } from "../../lib/projects.mjs";
+
+const project = getProject("selflearning-pages");
+const readmeHtml = await getReadmeHtml(project);
+---
+<BaseLayout
+  title={project.title}
+  description={project.description}
+  mainClass="detail"
+  jsonLd={projectJsonLd(project)}
+>
+  <ProjectLayout project={project} readmeHtml={readmeHtml} />
+</BaseLayout>
