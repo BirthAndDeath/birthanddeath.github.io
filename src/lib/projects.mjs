@@ -7,6 +7,28 @@ import { renderMarkdown, rewriteRelativeUrls } from "./markdown.mjs";
 // 比 import.meta.url 更可靠——后者在打包后可能指向别的路径。
 const DATA_DIR = path.join(process.cwd(), "src", "data");
 
+// 拉取失败是否直接让构建失败：
+// - STRICT_FETCH=1/true 强制开启；=0/false 强制关闭；
+// - 否则在 GitHub Actions（GITHUB_ACTIONS=true）下默认开启。
+function isStrict() {
+  const flag = process.env.STRICT_FETCH;
+  if (flag === "0" || flag === "false") return false;
+  if (flag === "1" || flag === "true") return true;
+  return process.env.GITHUB_ACTIONS === "true";
+}
+
+// GitHub API 请求头；有 GITHUB_TOKEN 时带上以提升配额与稳定性。
+function githubHeaders(extra) {
+  const headers = Object.assign(
+    { "User-Agent": "birthanddeath-site-build" },
+    extra || {}
+  );
+  if (process.env.GITHUB_TOKEN) {
+    headers.Authorization = "Bearer " + process.env.GITHUB_TOKEN;
+  }
+  return headers;
+}
+
 export const OWNER = "BirthAndDeath";
 export const SITE = "https://birthanddeath.github.io";
 
@@ -272,10 +294,10 @@ function withTimeout(url, headers, ms = 12000) {
 function readmeSources(repo, branch) {
   return [
     () =>
-      withTimeout(`https://api.github.com/repos/${OWNER}/${repo}/readme`, {
-        Accept: "application/vnd.github.raw",
-        "User-Agent": "birthanddeath-site-build",
-      }),
+      withTimeout(
+        `https://api.github.com/repos/${OWNER}/${repo}/readme`,
+        githubHeaders({ Accept: "application/vnd.github.raw" })
+      ),
     () => withTimeout(`https://cdn.jsdelivr.net/gh/${OWNER}/${repo}@${branch}/README.md`),
     () => withTimeout(`https://raw.githubusercontent.com/${OWNER}/${repo}/${branch}/README.md`),
   ];
@@ -291,6 +313,11 @@ async function readmeText({ slug, repo, branch }) {
         lastError = error;
       }
     }
+  }
+  if (isStrict()) {
+    throw new Error(
+      `[strict] 无法获取 ${slug} 的 README：${lastError ? lastError.message : "unknown"}`
+    );
   }
   // 网络全部失败时，回退到本地缓存的 README（若存在）。
   try {
@@ -316,7 +343,8 @@ export function getReadmeHtml(project) {
         repo: project.repo,
         branch: project.branch,
       });
-    } catch {
+    } catch (error) {
+      if (isStrict()) throw error;
       return "";
     }
   })();
@@ -365,10 +393,7 @@ function fallbackMeta(project) {  return {
 }
 
 async function fetchRepoMeta(project) {
-  const headers = {
-    Accept: "application/vnd.github+json",
-    "User-Agent": "birthanddeath-site-build",
-  };
+  const headers = githubHeaders({ Accept: "application/vnd.github+json" });
   const base = `https://api.github.com/repos/${OWNER}/${project.repo}`;
   const data = await fetchJson(base, headers, 6000);
 
@@ -422,7 +447,12 @@ export function getRepoMeta(project) {
     }
     try {
       return await fetchRepoMeta(project);
-    } catch {
+    } catch (error) {
+      if (isStrict()) {
+        throw new Error(
+          `[strict] 无法获取 ${project.slug} 的仓库状态：${error.message}`
+        );
+      }
       try {
         return await readCache();
       } catch {

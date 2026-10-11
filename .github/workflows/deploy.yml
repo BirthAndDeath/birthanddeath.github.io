@@ -24,6 +24,9 @@ jobs:
         uses: withastro/action@v3
         with:
           node-version: 22
+        env:
+          STRICT_FETCH: "1"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deploy:
     needs: build
