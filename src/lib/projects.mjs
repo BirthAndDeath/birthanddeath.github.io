@@ -1,5 +1,11 @@
+import path from "node:path";
 import { readFile } from "node:fs/promises";
+import { domainToUnicode } from "node:url";
 import { renderMarkdown, rewriteRelativeUrls } from "./markdown.mjs";
+
+// 缓存目录基于项目根目录解析（构建时 cwd 为项目根），
+// 比 import.meta.url 更可靠——后者在打包后可能指向别的路径。
+const DATA_DIR = path.join(process.cwd(), "src", "data");
 
 export const OWNER = "BirthAndDeath";
 export const SITE = "https://birthanddeath.github.io";
@@ -162,6 +168,55 @@ export const projects = [
       zh: "访问站点 ↗",
     },
   },
+  {
+    slug: "is_gay",
+    name: "is_gay",
+    repo: "is_gay",
+    branch: "main",
+    readme: false,
+    title: "is_gay · 恶搞小网页",
+    description: "is_gay：一个恶搞用的小网页项目（HTML），已部署上线。",
+    status: { key: "status.live", cls: "active", zh: "在线" },
+    tags: ["HTML", "Netlify", "Apache-2.0"],
+    lead: {
+      key: "ig.lead",
+      zh: "一个恶搞用的小网页，部署在 Netlify 上（点开的人.是.gay），可直接在浏览器打开。",
+    },
+    highlights: [
+      { key: "ig.h1", zh: "恶搞用的小网页（纯 HTML）。" },
+      { key: "ig.h2", zh: "已部署上线：可在浏览器直接访问。" },
+      { key: "ig.h3", zh: "基于 Apache-2.0 开源。" },
+    ],
+    note: { key: "ig.note", zh: "仅为娱乐用途。" },
+    repoUrl: "https://github.com/BirthAndDeath/is_gay",
+    liveUrl: "https://点开的人.是.gay",
+    language: "HTML",
+    license: "Apache-2.0",
+    links: [
+      {
+        href: "https://点开的人.是.gay",
+        key: "home.visit",
+        zh: "访问站点 ↗",
+        cls: "primary",
+      },
+    ],
+    extraLinks: [
+      {
+        href: "https://github.com/BirthAndDeath/is_gay",
+        key: "btn.repo",
+        zh: "GitHub 仓库 ↗",
+      },
+    ],
+    card: {
+      key: "card.isgay.desc",
+      zh: "恶搞用的小网页项目（HTML），已部署上线。",
+    },
+    cardLink: {
+      href: "https://点开的人.是.gay",
+      key: "home.visit",
+      zh: "访问站点 ↗",
+    },
+  },
 ];
 
 export function getProject(slug) {
@@ -239,7 +294,7 @@ async function readmeText({ slug, repo, branch }) {
   }
   // 网络全部失败时，回退到本地缓存的 README（若存在）。
   try {
-    return await readFile(new URL(`../data/readmes/${slug}.md`, import.meta.url), "utf8");
+    return await readFile(path.join(DATA_DIR, "readmes", `${slug}.md`), "utf8");
   } catch {
     /* no cache */
   }
@@ -267,5 +322,115 @@ export function getReadmeHtml(project) {
   })();
 
   readmeCache.set(project.slug, promise);
+  return promise;
+}
+
+async function fetchJson(url, headers, ms = 12000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), ms);
+  try {
+    const res = await fetch(url, { headers, signal: controller.signal });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    return await res.json();
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+// 把可能含 punycode 主机的 URL 转成可读的 Unicode 形式（保持可点击）。
+function unicodeUrl(url) {
+  if (!url) return url;
+  try {
+    const u = new URL(url);
+    const host = domainToUnicode(u.hostname);
+    const rest = (u.pathname === "/" ? "" : u.pathname) + u.search + u.hash;
+    return `${u.protocol}//${host}${rest}`;
+  } catch {
+    return url;
+  }
+}
+
+function fallbackMeta(project) {  return {
+    stars: null,
+    forks: null,
+    openIssues: null,
+    pushedAt: null,
+    license: project.license || null,
+    defaultBranch: project.branch || null,
+    homepage: project.liveUrl || null,
+    topics: [],
+    archived: false,
+    latestTag: null,
+  };
+}
+
+async function fetchRepoMeta(project) {
+  const headers = {
+    Accept: "application/vnd.github+json",
+    "User-Agent": "birthanddeath-site-build",
+  };
+  const base = `https://api.github.com/repos/${OWNER}/${project.repo}`;
+  const data = await fetchJson(base, headers, 6000);
+
+  let latestTag = null;
+  try {
+    const release = await fetchJson(`${base}/releases/latest`, headers, 5000);
+    latestTag = release.tag_name || release.name || null;
+  } catch {
+    /* no release */
+  }
+
+  return {
+    stars: typeof data.stargazers_count === "number" ? data.stargazers_count : null,
+    forks: typeof data.forks_count === "number" ? data.forks_count : null,
+    openIssues: typeof data.open_issues_count === "number" ? data.open_issues_count : null,
+    pushedAt: data.pushed_at ? String(data.pushed_at).slice(0, 10) : null,
+    license:
+      (data.license && (data.license.spdx_id || data.license.name)) ||
+      project.license ||
+      null,
+    defaultBranch: data.default_branch || project.branch || null,
+    homepage: unicodeUrl(data.homepage) || project.liveUrl || null,
+    topics: Array.isArray(data.topics) ? data.topics : [],
+    archived: Boolean(data.archived),
+    latestTag,
+  };
+}
+
+const metaCache = new Map();
+
+// 构建时从 GitHub API 拉取仓库最新状态；失败时回退到本地缓存，最后回退到静态默认值。
+export function getRepoMeta(project) {
+  if (metaCache.has(project.slug)) return metaCache.get(project.slug);
+
+  const readCache = async () =>
+    JSON.parse(
+      await readFile(path.join(DATA_DIR, "meta", `${project.slug}.json`), "utf8")
+    );
+
+  // 设置 SITE_OFFLINE=1 时优先使用本地缓存（适合离线/受限网络构建）。
+  const offline =
+    process.env.SITE_OFFLINE === "1" || process.env.SITE_OFFLINE === "true";
+
+  const promise = (async () => {
+    if (offline) {
+      try {
+        return await readCache();
+      } catch {
+        /* fall through to network */
+      }
+    }
+    try {
+      return await fetchRepoMeta(project);
+    } catch {
+      try {
+        return await readCache();
+      } catch {
+        return fallbackMeta(project);
+      }
+    }
+  })();
+
+  metaCache.set(project.slug, promise);
   return promise;
 }

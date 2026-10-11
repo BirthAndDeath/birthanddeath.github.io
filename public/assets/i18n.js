@@ -19,7 +19,7 @@
       "home.browse": "浏览项目",
       "home.github": "GitHub 主页 ↗",
       "home.projects": "项目",
-      "home.count": "共 4 个",
+      "home.count": "共 5 个",
       "home.details": "详情 →",
       "home.gh": "GitHub ↗",
       "home.visit": "访问站点 ↗",
@@ -28,15 +28,29 @@
       "status.dev": "开发中",
       "status.liveDev": "在线 · 开发中",
       "status.site": "本站",
+      "status.live": "在线",
 
       "card.whitebox.desc": "透明、基于能力的 WebAssembly 应用沙箱，细粒度控制文件系统访问，并支持完全回滚。",
       "card.openwire.desc": "跨平台 P2P 聊天应用，采用后量子端到端加密，基于 libp2p 与 Tauri 2。",
       "card.selflearning.desc": "面向自主学习的多语言文档站点，使用 Astro + Starlight 构建。",
       "card.website.desc": "你正在浏览的个人网站，集中介绍与索引上述所有项目。",
+      "card.isgay.desc": "恶搞用的小网页项目（HTML），已部署上线。",
 
       "panel.highlights": "亮点",
       "panel.docs": "完整文档",
       "btn.repo": "GitHub 仓库 ↗",
+      "repo.status": "仓库状态",
+      "repo.stars": "Stars",
+      "repo.forks": "Forks",
+      "repo.issues": "Issues（含 PR）",
+      "repo.updated": "最近更新",
+      "repo.license": "许可",
+      "repo.branch": "默认分支",
+      "repo.release": "最新版本",
+      "repo.homepage": "主页",
+      "repo.archived": "已归档",
+      "repo.updatedShort": "更新于",
+      "repo.topics": "标签",
 
       "wb.lead": "一个透明、基于能力（capability）的 WebAssembly 应用沙箱。为用户提供对文件系统访问的细粒度控制，并允许完全回滚任何更改——让每个应用都变成临时的、可审计的环境。",
       "wb.note": "状态：核心执行引擎与进程隔离框架已就绪，GUI 和大部分沙箱能力仍在开发中。",
@@ -61,6 +75,12 @@
       "sl.h4": "公有领域（CC0-1.0），欢迎贡献。",
       "sl.docs": "以下内容来自仓库的 GitHub README。",
 
+      "ig.lead": "一个恶搞用的小网页，部署在 Netlify 上（点开的人.是.gay），可直接在浏览器打开。",
+      "ig.h1": "恶搞用的小网页（纯 HTML）。",
+      "ig.h2": "已部署上线：可在浏览器直接访问。",
+      "ig.h3": "基于 Apache-2.0 开源。",
+      "ig.note": "仅为娱乐用途。",
+
       "ws.lead": "这是你正在浏览的个人网站。它集中介绍并索引我的所有开源项目，每个项目都有独立的介绍页面。",
       "ws.h1": "首页 — 项目卡片总览与个人简介。",
       "ws.h2": "项目页 — 每个项目一个页面，在构建时抓取并内联渲染该仓库的 README。",
@@ -76,6 +96,7 @@
       "ws.row.whitebox": "透明、基于能力的 WebAssembly 应用沙箱",
       "ws.row.openwire": "后量子加密的跨平台 P2P 聊天应用",
       "ws.row.selflearning": "多语言自学文档站点",
+      "ws.row.isgay": "恶搞用的小网页项目（HTML）",
       "ws.repo": "GitHub 仓库 ↗",
       "ws.home": "访问首页 ↗"
     },
@@ -90,7 +111,7 @@
       "home.browse": "Browse projects",
       "home.github": "GitHub profile ↗",
       "home.projects": "Projects",
-      "home.count": "4 total",
+      "home.count": "5 total",
       "home.details": "Details →",
       "home.gh": "GitHub ↗",
       "home.visit": "Visit site ↗",
@@ -99,15 +120,29 @@
       "status.dev": "Developing",
       "status.liveDev": "Live · Developing",
       "status.site": "This site",
+      "status.live": "Live",
 
       "card.whitebox.desc": "A transparent, capability-based WebAssembly sandbox with fine-grained filesystem control and full rollback.",
       "card.openwire.desc": "A cross-platform P2P chat app with post-quantum end-to-end encryption, built on libp2p and Tauri 2.",
       "card.selflearning.desc": "A multilingual documentation site for self-directed learning, built with Astro + Starlight.",
       "card.website.desc": "The personal website you are viewing now — a hub that introduces and indexes all projects above.",
+      "card.isgay.desc": "A small prank web page (HTML), deployed and live.",
 
       "panel.highlights": "Highlights",
       "panel.docs": "Full documentation",
       "btn.repo": "GitHub repository ↗",
+      "repo.status": "Repository status",
+      "repo.stars": "Stars",
+      "repo.forks": "Forks",
+      "repo.issues": "Issues (incl. PRs)",
+      "repo.updated": "Last update",
+      "repo.license": "License",
+      "repo.branch": "Default branch",
+      "repo.release": "Latest release",
+      "repo.homepage": "Homepage",
+      "repo.archived": "Archived",
+      "repo.updatedShort": "Updated",
+      "repo.topics": "Topics",
 
       "wb.lead": "A transparent, capability-based sandbox for WebAssembly applications. It gives users fine-grained control over filesystem access and allows full rollback of any changes — turning every app into a temporary, auditable environment.",
       "wb.note": "Status: the core execution engine and process isolation scaffolding exist, but the GUI and most sandbox capabilities are still in development.",
@@ -132,6 +167,12 @@
       "sl.h4": "Public domain (CC0-1.0); contributions welcome.",
       "sl.docs": "The content below is from the repository's GitHub README.",
 
+      "ig.lead": "A small prank web page, deployed on Netlify (点开的人.是.gay) and viewable in the browser.",
+      "ig.h1": "A small prank web page (plain HTML).",
+      "ig.h2": "Deployed and live: open it in the browser.",
+      "ig.h3": "Open source under Apache-2.0.",
+      "ig.note": "For entertainment only.",
+
       "ws.lead": "This is the personal website you are viewing. It introduces and indexes all of my open-source projects, each with its own page.",
       "ws.h1": "Home — an overview of project cards and a short intro.",
       "ws.h2": "Project pages — one page per project that fetches and inlines the repository README at build time.",
@@ -147,6 +188,7 @@
       "ws.row.whitebox": "A transparent, capability-based WebAssembly sandbox",
       "ws.row.openwire": "A cross-platform P2P chat app with post-quantum encryption",
       "ws.row.selflearning": "A multilingual self-learning docs site",
+      "ws.row.isgay": "A small prank web page (HTML)",
       "ws.repo": "GitHub repository ↗",
       "ws.home": "Visit homepage ↗"
     }
@@ -213,6 +255,12 @@
 
     var select = document.getElementById("langSelect");
     if (select) select.value = lang;
+
+    try {
+      document.dispatchEvent(new CustomEvent("i18n:applied", { detail: { lang: lang } }));
+    } catch (e) {
+      /* ignore */
+    }
   }
 
   function init() {

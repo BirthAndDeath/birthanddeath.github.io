@@ -32,15 +32,25 @@ Built with [Astro](https://astro.build). Each project README is fetched **at bui
 │   ├── layouts/             # BaseLayout（SEO head）+ ProjectLayout
 │   ├── lib/
 │   │   ├── markdown.mjs     # 轻量 Markdown 渲染器（构建时）
-│   │   └── projects.mjs     # 项目元数据 + README 抓取
+│   │   └── projects.mjs     # 项目元数据 + README/仓库状态抓取
+│   ├── data/
+│   │   ├── readmes/         # README 离线兜底缓存
+│   │   └── meta/            # 仓库状态离线兜底缓存
 │   └── pages/
 │       ├── index.astro          # /
 │       ├── whitebox-forge/      # /whitebox-forge/
 │       ├── openwire/            # /openwire/
 │       ├── selflearning-pages/  # /selflearning-pages/
+│       ├── is_gay/              # /is_gay/
 │       └── website/             # /website/
 └── .github/workflows/deploy.yml  # GitHub Actions 构建并部署到 Pages
 ```
+
+## Repository status / 仓库状态
+
+At build time `getRepoMeta()` fetches each repository's live status from the GitHub API (stars, forks, open issues, last push, license, default branch, latest release, homepage) and shows it on the home cards and project pages. On failure it falls back to the committed cache under `src/data/meta/`. Only repositories registered in `src/lib/projects.mjs` are tracked.
+
+构建时 `getRepoMeta()` 从 GitHub API 拉取每个仓库的最新状态（stars、forks、open issues、最近推送、许可、默认分支、最新 release、主页），展示在首页卡片与项目页；失败时回退到 `src/data/meta/` 下的缓存。仅跟踪 `src/lib/projects.mjs` 中登记的项目。
 
 ## README embedding / README 内嵌
 

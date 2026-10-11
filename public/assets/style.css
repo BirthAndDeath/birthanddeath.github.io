@@ -1,35 +1,40 @@
+/* ==========================================================================
+   Liquid Glass theme
+   玻璃拟态：磨砂玻璃表面 + 彩色光晕背景 + 高光边缘。
+   保留原有类名，深/浅色自适应，并提供降低透明度回退。
+   ========================================================================== */
+
 :root {
-  --bg: #0d1117;
-  --bg-soft: #161b22;
-  --card: #161b22;
-  --card-hover: #1c2330;
-  --border: #30363d;
-  --text: #e6edf3;
-  --muted: #8b949e;
-  --accent: #58a6ff;
-  --accent-2: #7ee787;
-  --accent-3: #d2a8ff;
-  --radius: 14px;
+  color-scheme: dark;
+
+  --bg: #000000;
+
+  --glass: rgba(255, 255, 255, 0.06);
+  --glass-strong: rgba(255, 255, 255, 0.1);
+  --glass-hover: rgba(255, 255, 255, 0.14);
+  --glass-border: rgba(255, 255, 255, 0.16);
+  --glass-highlight: rgba(255, 255, 255, 0.28);
+  --glass-blur: 20px;
+
+  --text: #eaf0fb;
+  --muted: #a3b1c9;
+
+  --accent: #6ea8ff;
+  --accent-2: #7ee7c7;
+  --accent-3: #c39bff;
+
+  --radius: 10px;
+  --radius-sm: 8px;
   --maxw: 1000px;
+  --shadow: 0 18px 50px rgba(3, 7, 18, 0.45);
   --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC",
     "PingFang SC", "Microsoft YaHei", Roboto, Helvetica, Arial, sans-serif;
   --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
     "Liberation Mono", monospace;
-}
 
-@media (prefers-color-scheme: light) {
-  :root {
-    --bg: #f6f8fa;
-    --bg-soft: #ffffff;
-    --card: #ffffff;
-    --card-hover: #f3f5f8;
-    --border: #d0d7de;
-    --text: #1f2328;
-    --muted: #59636e;
-    --accent: #0969da;
-    --accent-2: #1a7f37;
-    --accent-3: #8250df;
-  }
+  /* 波动色彩（占比控制在背景的一半以内，其余留黑） */
+  --glow-purple: rgba(120, 60, 230, 0.5);
+  --glow-cyan: rgba(30, 168, 188, 0.42);
 }
 
 * {
@@ -42,11 +47,28 @@ html {
 
 body {
   margin: 0;
-  background: var(--bg);
+  min-height: 100vh;
   color: var(--text);
   font-family: var(--font);
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(
+      var(--g1, 42% 52% at 30% 34%),
+      var(--glow-a, rgba(120, 60, 230, 0.5)),
+      transparent 78%
+    ),
+    radial-gradient(
+      var(--g2, 42% 52% at 70% 66%),
+      var(--glow-b, rgba(30, 168, 188, 0.42)),
+      transparent 78%
+    );
+  background-size: 190% 190%;
+  background-position: var(--bg-x, 25%) var(--bg-y, 25%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  will-change: background-position;
 }
 
 a {
@@ -64,14 +86,16 @@ a:hover {
   padding: 0 20px;
 }
 
-/* Header */
+/* ---------- Header ---------- */
 .site-header {
   position: sticky;
   top: 0;
   z-index: 20;
-  backdrop-filter: blur(10px);
-  background: color-mix(in srgb, var(--bg) 82%, transparent);
-  border-bottom: 1px solid var(--border);
+  background: var(--glass);
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: inset 0 1px 0 var(--glass-highlight);
+  backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
 }
 
 .site-header .wrap {
@@ -79,7 +103,7 @@ a:hover {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  height: 60px;
+  height: 62px;
 }
 
 .brand {
@@ -95,10 +119,11 @@ a:hover {
 }
 
 .brand .dot {
-  width: 12px;
-  height: 12px;
+  width: 13px;
+  height: 13px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--accent), var(--accent-3));
+  box-shadow: 0 0 14px color-mix(in srgb, var(--accent) 70%, transparent);
 }
 
 .nav {
@@ -123,25 +148,46 @@ a:hover {
 }
 
 .lang-select {
+  -webkit-appearance: none;
+  appearance: none;
   font: inherit;
   font-size: 13px;
   font-weight: 600;
+  line-height: 1.2;
   color: var(--text);
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 5px 8px;
+  background-color: var(--glass-strong);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a3b1c9' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 11px center;
+  background-size: 11px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 7px 30px 7px 13px;
   cursor: pointer;
+  box-shadow: inset 0 1px 0 var(--glass-highlight);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  transition: background-color 0.18s ease, border-color 0.18s ease;
 }
 
 .lang-select:hover {
-  border-color: var(--accent);
-  background: var(--card-hover);
+  background-color: var(--glass-hover);
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--glass-border));
 }
 
-/* Hero */
+.lang-select:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--accent) 60%, transparent);
+  outline-offset: 2px;
+}
+
+.lang-select option {
+  background: #0a0e1a;
+  color: var(--text);
+}
+
+/* ---------- Hero ---------- */
 .hero {
-  padding: 72px 0 40px;
+  padding: 84px 0 44px;
   text-align: center;
 }
 
@@ -149,29 +195,63 @@ a:hover {
   display: inline-block;
   font-size: 13px;
   color: var(--muted);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 4px 12px;
-  margin-bottom: 18px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  box-shadow: inset 0 1px 0 var(--glass-highlight);
+  border-radius: var(--radius);
+  padding: 5px 14px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
 }
 
 .hero h1 {
-  font-size: clamp(30px, 5vw, 46px);
-  line-height: 1.15;
-  margin: 0 0 14px;
+  font-size: clamp(32px, 5.5vw, 52px);
+  line-height: 1.12;
+  margin: 0 0 16px;
   letter-spacing: -0.02em;
 }
 
 .hero h1 .grad {
-  background: linear-gradient(120deg, var(--accent), var(--accent-3), var(--accent-2));
+  background: linear-gradient(110deg, var(--accent), var(--accent-3), var(--accent-2));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  filter: drop-shadow(0 2px 16px color-mix(in srgb, var(--accent-3) 45%, transparent));
+}
+
+.type-caret {
+  display: inline-block;
+  width: 3px;
+  height: 0.9em;
+  margin-left: 6px;
+  vertical-align: -0.08em;
+  background: currentColor;
+  border-radius: 1px;
+  animation: typeCaretBlink 1s step-end infinite;
+}
+
+.type-caret-done {
+  animation: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+@keyframes typeCaretBlink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .type-caret {
+    animation: none;
+  }
 }
 
 .hero p {
   max-width: 640px;
-  margin: 0 auto 22px;
+  margin: 0 auto 26px;
   color: var(--muted);
   font-size: 17px;
 }
@@ -183,38 +263,47 @@ a:hover {
   flex-wrap: wrap;
 }
 
+/* ---------- Buttons ---------- */
 .btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 18px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: var(--card);
+  padding: 11px 20px;
+  border-radius: var(--radius);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-strong);
   color: var(--text);
   font-size: 14px;
   font-weight: 600;
+  box-shadow: inset 0 1px 0 var(--glass-highlight);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
 }
 
 .btn:hover {
   text-decoration: none;
-  background: var(--card-hover);
-  border-color: var(--accent);
+  background: var(--glass-hover);
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--glass-border));
+  transform: translateY(-1px);
 }
 
 .btn.primary {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: linear-gradient(135deg, var(--accent), var(--accent-3));
+  border-color: transparent;
   color: #fff;
+  box-shadow: 0 10px 26px color-mix(in srgb, var(--accent) 45%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
 }
 
 .btn.primary:hover {
-  background: color-mix(in srgb, var(--accent) 88%, #000);
+  filter: brightness(1.06);
 }
 
-/* Section */
+/* ---------- Sections ---------- */
 .section {
-  padding: 28px 0 56px;
+  padding: 28px 0 60px;
 }
 
 .section-title {
@@ -222,11 +311,11 @@ a:hover {
   align-items: baseline;
   justify-content: space-between;
   gap: 12px;
-  margin: 0 0 20px;
+  margin: 0 0 22px;
 }
 
 .section-title h2 {
-  font-size: 22px;
+  font-size: 23px;
   margin: 0;
 }
 
@@ -235,27 +324,42 @@ a:hover {
   font-size: 14px;
 }
 
-/* Project grid */
+/* ---------- Cards ---------- */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 18px;
+  gap: 20px;
 }
 
 .card {
+  position: relative;
   display: flex;
   flex-direction: column;
-  background: var(--card);
-  border: 1px solid var(--border);
+  overflow: hidden;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius);
-  padding: 22px;
-  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+  padding: 24px;
+  box-shadow: var(--shadow), inset 0 1px 0 var(--glass-highlight);
+  backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(180deg, var(--glass-highlight), transparent 42%);
+  opacity: 0.55;
 }
 
 .card:hover {
-  transform: translateY(-3px);
-  border-color: var(--accent);
-  background: var(--card-hover);
+  transform: translateY(-4px);
+  background: var(--glass-hover);
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--glass-border));
 }
 
 .card .top {
@@ -298,9 +402,10 @@ a:hover {
   font-family: var(--mono);
   font-size: 12px;
   color: var(--muted);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 2px 9px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 3px 10px;
 }
 
 .card .links {
@@ -310,33 +415,36 @@ a:hover {
   font-weight: 600;
 }
 
-/* Status pill */
+/* ---------- Status pills ---------- */
 .status {
   font-size: 12px;
   font-weight: 600;
-  border-radius: 999px;
-  padding: 3px 10px;
+  border-radius: var(--radius);
+  padding: 4px 11px;
   white-space: nowrap;
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .status.dev {
   color: var(--accent-3);
-  background: color-mix(in srgb, var(--accent-3) 16%, transparent);
+  background: color-mix(in srgb, var(--accent-3) 20%, transparent);
 }
 
 .status.active {
   color: var(--accent-2);
-  background: color-mix(in srgb, var(--accent-2) 16%, transparent);
+  background: color-mix(in srgb, var(--accent-2) 20%, transparent);
 }
 
 .status.wip {
   color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
 }
 
-/* Project detail */
+/* ---------- Project detail ---------- */
 .detail {
-  padding: 48px 0 64px;
+  padding: 52px 0 72px;
 }
 
 .back {
@@ -347,8 +455,8 @@ a:hover {
 }
 
 .detail h1 {
-  font-size: clamp(26px, 4vw, 38px);
-  margin: 0 0 10px;
+  font-size: clamp(28px, 4.5vw, 42px);
+  margin: 0 0 12px;
   letter-spacing: -0.02em;
 }
 
@@ -371,19 +479,39 @@ a:hover {
   gap: 12px;
 }
 
+/* ---------- Glass panels ---------- */
 .panel {
-  background: var(--card);
-  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius);
-  padding: 24px 26px;
-  margin-top: 22px;
+  padding: 26px 28px;
+  margin-top: 24px;
+  box-shadow: var(--shadow), inset 0 1px 0 var(--glass-highlight);
+  backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+}
+
+.panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(180deg, var(--glass-highlight), transparent 36%);
+  opacity: 0.45;
+}
+
+.panel > * {
+  position: relative;
 }
 
 .panel h2 {
   font-size: 18px;
   margin: 0 0 14px;
   padding-bottom: 10px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--glass-border);
 }
 
 .panel h3 {
@@ -400,6 +528,7 @@ a:hover {
   margin: 6px 0;
 }
 
+/* ---------- Key/value tables ---------- */
 .kv {
   width: 100%;
   border-collapse: collapse;
@@ -410,7 +539,7 @@ a:hover {
 .kv td {
   text-align: left;
   padding: 9px 10px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--glass-border);
   vertical-align: top;
 }
 
@@ -428,15 +557,16 @@ a:hover {
 code {
   font-family: var(--mono);
   font-size: 0.9em;
-  background: color-mix(in srgb, var(--muted) 16%, transparent);
+  background: var(--glass-strong);
+  border: 1px solid var(--glass-border);
   border-radius: 6px;
   padding: 1px 6px;
 }
 
 pre {
-  background: var(--bg-soft);
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  background: rgba(6, 10, 22, 0.55);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
   padding: 16px;
   overflow-x: auto;
   font-size: 13px;
@@ -444,23 +574,27 @@ pre {
 
 pre code {
   background: none;
+  border: none;
   padding: 0;
 }
 
 .note {
+  border: 1px solid var(--glass-border);
   border-left: 3px solid var(--accent-3);
-  background: color-mix(in srgb, var(--accent-3) 10%, transparent);
-  border-radius: 0 10px 10px 0;
-  padding: 12px 16px;
+  background: color-mix(in srgb, var(--accent-3) 14%, var(--glass));
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
   color: var(--muted);
   font-size: 14px;
-  margin: 16px 0 0;
+  margin: 18px 0 0;
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
 }
 
-/* Rendered README */
+/* ---------- Rendered README ---------- */
 .readme {
   margin-top: 18px;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--glass-border);
   padding-top: 18px;
   overflow-wrap: anywhere;
 }
@@ -475,21 +609,36 @@ pre code {
   margin: 22px 0 10px;
 }
 
-.readme h1 { font-size: 24px; }
+.readme h1 {
+  font-size: 24px;
+}
+
 .readme h2 {
   font-size: 20px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--glass-border);
   padding-bottom: 6px;
 }
-.readme h3 { font-size: 16px; }
-.readme h4 { font-size: 14px; }
 
-.readme p { margin: 10px 0; }
+.readme h3 {
+  font-size: 16px;
+}
+
+.readme h4 {
+  font-size: 14px;
+}
+
+.readme p {
+  margin: 10px 0;
+}
 
 .readme ul,
-.readme ol { padding-left: 22px; }
+.readme ol {
+  padding-left: 22px;
+}
 
-.readme li { margin: 5px 0; }
+.readme li {
+  margin: 5px 0;
+}
 
 .readme li.task {
   list-style: none;
@@ -497,7 +646,7 @@ pre code {
 }
 
 .readme blockquote {
-  border-left: 3px solid var(--border);
+  border-left: 3px solid var(--glass-border);
   margin: 12px 0;
   padding: 2px 14px;
   color: var(--muted);
@@ -505,7 +654,7 @@ pre code {
 
 .readme hr {
   border: 0;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--glass-border);
   margin: 20px 0;
 }
 
@@ -520,25 +669,31 @@ pre code {
 
 .readme th,
 .readme td {
-  border: 1px solid var(--border);
+  border: 1px solid var(--glass-border);
   padding: 8px 10px;
   text-align: left;
 }
 
-.readme th { background: var(--bg-soft); }
+.readme th {
+  background: var(--glass-strong);
+}
 
-.readme img { max-width: 100%; height: auto; }
+.readme img {
+  max-width: 100%;
+  height: auto;
+}
 
 .readme pre {
-  background: var(--bg-soft);
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  background: rgba(6, 10, 22, 0.55);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
   padding: 14px;
   overflow-x: auto;
 }
 
 .readme pre code {
   background: none;
+  border: none;
   padding: 0;
 }
 
@@ -547,12 +702,55 @@ pre code {
   font-style: italic;
 }
 
-/* Footer */
+/* ---------- Repository status ---------- */
+.repo-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+.repo-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  align-items: center;
+}
+
+.repo-stat {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.repo-stat .k {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.repo-stat .v {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.repo-home {
+  margin: 14px 0 0;
+  font-size: 14px;
+}
+
+/* ---------- Footer ---------- */
 .site-footer {
-  border-top: 1px solid var(--border);
-  padding: 28px 0 40px;
+  margin-top: 20px;
+  border-top: 1px solid var(--glass-border);
+  background: var(--glass);
+  padding: 30px 0 42px;
   color: var(--muted);
   font-size: 14px;
+  backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
 }
 
 .site-footer .wrap {
@@ -562,11 +760,42 @@ pre code {
   gap: 10px;
 }
 
+/* ---------- Fallbacks ---------- */
+@media (prefers-reduced-transparency: reduce) {
+  .site-header,
+  .card,
+  .card::before,
+  .panel,
+  .panel::before,
+  .btn,
+  .note,
+  .lang-select,
+  .hero .eyebrow,
+  .site-footer,
+  .status {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .site-header,
+  .site-footer {
+    background: color-mix(in srgb, var(--bg) 88%, var(--text));
+  }
+
+  .card,
+  .panel {
+    background: color-mix(in srgb, var(--bg) 82%, var(--text));
+  }
+}
+
 @media (max-width: 640px) {
   .nav {
     display: none;
   }
   .hero {
-    padding: 48px 0 28px;
+    padding: 56px 0 30px;
+  }
+  .panel {
+    padding: 22px 20px;
   }
 }

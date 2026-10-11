@@ -1,10 +1,13 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ProjectLayout from "../../layouts/ProjectLayout.astro";
-import { getProject, getReadmeHtml, projectJsonLd } from "../../lib/projects.mjs";
+import { getProject, getReadmeHtml, getRepoMeta, projectJsonLd } from "../../lib/projects.mjs";
 
 const project = getProject("selflearning-pages");
-const readmeHtml = await getReadmeHtml(project);
+const [readmeHtml, meta] = await Promise.all([
+  project.readme === false ? Promise.resolve("") : getReadmeHtml(project),
+  getRepoMeta(project),
+]);
 ---
 <BaseLayout
   title={project.title}
@@ -12,5 +15,5 @@ const readmeHtml = await getReadmeHtml(project);
   mainClass="detail"
   jsonLd={projectJsonLd(project)}
 >
-  <ProjectLayout project={project} readmeHtml={readmeHtml} />
+  <ProjectLayout project={project} readmeHtml={readmeHtml} meta={meta} />
 </BaseLayout>

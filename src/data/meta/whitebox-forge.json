@@ -1,0 +1,12 @@
+{
+  "stars": 1,
+  "forks": 0,
+  "openIssues": 0,
+  "pushedAt": "2026-10-07",
+  "license": "Apache-2.0",
+  "defaultBranch": "main",
+  "homepage": "",
+  "topics": ["sandbox", "wasm"],
+  "archived": false,
+  "latestTag": null
+}

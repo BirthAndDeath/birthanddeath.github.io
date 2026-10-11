@@ -1,5 +1,5 @@
 ---
-const { project, readmeHtml } = Astro.props;
+const { project, readmeHtml, meta } = Astro.props;
 ---
 <div class="wrap">
   <a class="back" href="/" data-i18n="back">← 返回项目列表</a>
@@ -38,6 +38,70 @@ const { project, readmeHtml } = Astro.props;
     )
   }
 
+  {
+    meta && (
+      <section class="panel">
+        <h2 data-i18n="repo.status">仓库状态</h2>
+        <div class="repo-stats">
+          {meta.stars != null && (
+            <span class="repo-stat">
+              <span class="k" data-i18n="repo.stars">Stars</span>
+              <span class="v">{meta.stars}</span>
+            </span>
+          )}
+          {meta.forks != null && (
+            <span class="repo-stat">
+              <span class="k" data-i18n="repo.forks">Forks</span>
+              <span class="v">{meta.forks}</span>
+            </span>
+          )}
+          {meta.openIssues != null && (
+            <span class="repo-stat">
+              <span class="k" data-i18n="repo.issues">Issues</span>
+              <span class="v">{meta.openIssues}</span>
+            </span>
+          )}
+          {meta.pushedAt && (
+            <span class="repo-stat">
+              <span class="k" data-i18n="repo.updated">最近更新</span>
+              <span class="v">{meta.pushedAt}</span>
+            </span>
+          )}
+          {meta.license && (
+            <span class="repo-stat">
+              <span class="k" data-i18n="repo.license">许可</span>
+              <span class="v">{meta.license}</span>
+            </span>
+          )}
+          {meta.defaultBranch && (
+            <span class="repo-stat">
+              <span class="k" data-i18n="repo.branch">默认分支</span>
+              <span class="v">{meta.defaultBranch}</span>
+            </span>
+          )}
+          {meta.latestTag && (
+            <span class="repo-stat">
+              <span class="k" data-i18n="repo.release">最新版本</span>
+              <span class="v">{meta.latestTag}</span>
+            </span>
+          )}
+          {meta.archived && (
+            <span class="status dev" data-i18n="repo.archived">已归档</span>
+          )}
+        </div>
+        {
+          meta.homepage && (
+            <p class="repo-home">
+              <a href={meta.homepage} target="_blank" rel="noopener">
+                <span data-i18n="repo.homepage">主页</span> ↗
+              </a>
+            </p>
+          )
+        }
+      </section>
+    )
+  }
+
   <section class="panel">
     <h2 data-i18n="panel.highlights">亮点</h2>
     <ul>
@@ -49,45 +113,48 @@ const { project, readmeHtml } = Astro.props;
     </ul>
   </section>
 
-  <section class="panel">
-    <h2 data-i18n="panel.docs">完整文档</h2>
-    <p data-i18n={project.docs.key}>{project.docs.zh}</p>
-    {
-      readmeHtml ? (
-        <div class="readme" set:html={readmeHtml} />
-      ) : (
-        <p class="readme-status">
-          无法加载 README，
-          <a href={`${project.repoUrl}#readme`} target="_blank" rel="noopener">
-            在 GitHub 上查看 README ↗
-          </a>
-        </p>
-      )
-    }
-    {
-      project.extraLinks && project.extraLinks.length > 0 && (
-        <div class="detail-meta links">
-          {project.extraLinks.map((link) =>
-            link.key ? (
-              <a
-                class="btn"
-                href={link.href}
-                target="_blank"
-                rel="noopener"
-                data-i18n={link.key}
-              >
-                {link.zh}
-              </a>
-            ) : (
-              <a class="btn" href={link.href} target="_blank" rel="noopener">
-                {link.label}
-              </a>
-            )
-          )}
-        </div>
-      )
-    }
-  </section>
+  {
+    project.readme !== false && (
+      <section class="panel">
+        <h2 data-i18n="panel.docs">完整文档</h2>
+        <p data-i18n={project.docs.key}>{project.docs.zh}</p>
+        {readmeHtml ? (
+          <div class="readme" set:html={readmeHtml} />
+        ) : (
+          <p class="readme-status">
+            无法加载 README，
+            <a href={`${project.repoUrl}#readme`} target="_blank" rel="noopener">
+              在 GitHub 上查看 README ↗
+            </a>
+          </p>
+        )}
+      </section>
+    )
+  }
+
+  {
+    project.extraLinks && project.extraLinks.length > 0 && (
+      <div class="detail-meta links">
+        {project.extraLinks.map((link) =>
+          link.key ? (
+            <a
+              class="btn"
+              href={link.href}
+              target="_blank"
+              rel="noopener"
+              data-i18n={link.key}
+            >
+              {link.zh}
+            </a>
+          ) : (
+            <a class="btn" href={link.href} target="_blank" rel="noopener">
+              {link.label}
+            </a>
+          )
+        )}
+      </div>
+    )
+  }
 
   <a class="back" href="/" data-i18n="footer.all">← 所有项目</a>
 </div>
